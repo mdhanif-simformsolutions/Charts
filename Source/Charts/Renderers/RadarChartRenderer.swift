@@ -8,6 +8,7 @@
 //
 //  https://github.com/danielgindi/Charts
 //
+
 import Foundation
 import CoreGraphics
 
@@ -34,29 +35,26 @@ open class RadarChartRenderer: LineRadarRenderer
     
     open override func drawData(context: CGContext)
     {
-        guard let chart = chart else { return }
-        
-        let radarData = chart.data
-        
-        if radarData != nil
+        guard let chart = chart,
+              let radarData = chart.data as? RadarChartData else
         {
-            let mostEntries = radarData?.maxEntryCountSet?.entryCount ?? 0
+            return
+        }
+        
+        let mostEntries = radarData.maxEntryCountSet?.entryCount ?? 0
 
-            // If we redraw the data, remove and repopulate accessible elements to update label values and frames
-            self.accessibleChartElements.removeAll()
+        // If we redraw the data, remove and repopulate accessible elements to update label values and frames
+        self.accessibleChartElements.removeAll()
 
-            // Make the chart header the first element in the accessible elements array
-            if let accessibilityHeaderData = radarData as? RadarChartData {
-                let element = createAccessibleHeader(usingChart: chart,
-                                                     andData: accessibilityHeaderData,
-                                                     withDefaultDescription: "Radar Chart")
-                self.accessibleChartElements.append(element)
-            }
+        // Make the chart header the first element in the accessible elements array
+        let element = createAccessibleHeader(usingChart: chart,
+                                             andData: radarData,
+                                             withDefaultDescription: "Radar Chart")
+        self.accessibleChartElements.append(element)
 
-            for set in radarData!.dataSets as! [IRadarChartDataSet] where set.isVisible
-            {
-                drawDataSet(context: context, dataSet: set, mostEntries: mostEntries)
-            }
+        for case let set as RadarChartDataSetProtocol in radarData where set.isVisible
+        {
+            drawDataSet(context: context, dataSet: set, mostEntries: mostEntries)
         }
     }
     
@@ -66,7 +64,7 @@ open class RadarChartRenderer: LineRadarRenderer
     ///   - context:
     ///   - dataSet:
     ///   - mostEntries: the entry count of the dataset with the most entries
-    internal func drawDataSet(context: CGContext, dataSet: IRadarChartDataSet, mostEntries: Int)
+    internal func drawDataSet(context: CGContext, dataSet: RadarChartDataSetProtocol, mostEntries: Int)
     {
         guard let chart = chart else { return }
         
@@ -95,6 +93,7 @@ open class RadarChartRenderer: LineRadarRenderer
         let accessibilityAxisLabelValueTuples = zip(accessibilityXLabels, accessibilityEntryValues).map { ($0, $1.0, $1.1) }.sorted { $0.1 > $1.1 }
         let accessibilityDataSetDescription: String = description + ". \(entryCount) \(prefix + (entryCount == 1 ? "" : "s")). "
         let accessibilityFrameWidth: CGFloat = 22.0 // To allow a tap target of 44x44
+
         var accessibilityEntryElements: [NSUIAccessibilityElement] = []
 
         for j in 0 ..< entryCount
@@ -125,9 +124,8 @@ open class RadarChartRenderer: LineRadarRenderer
 
             let axp = center.moving(distance: CGFloat((accessibilityValue - chart.chartYMin) * Double(factor) * phaseY),
                                     atAngle: sliceangle * CGFloat(accessibilityValueIndex) * CGFloat(phaseX) + chart.rotationAngle)
-            
+
             let axDescription = description + " - " + accessibilityLabel + ": \(accessibilityValue) \(chart.data?.accessibilityEntryLabelSuffix ?? "")"
-         
             let axElement = createAccessibleElement(withDescription: axDescription,
                                                     container: chart,
                                                     dataSet: dataSet)
@@ -210,12 +208,14 @@ open class RadarChartRenderer: LineRadarRenderer
         
         let yoffset = CGFloat(5.0)
         
-        for i in 0 ..< data.dataSetCount
+        for i in data.indices
         {
             guard let
-                dataSet = data.getDataSetByIndex(i) as? IRadarChartDataSet,
+                dataSet = data[i] as? RadarChartDataSetProtocol,
                 shouldDrawValues(forDataSet: dataSet)
                 else { continue }
+            
+            let angleRadians = dataSet.valueLabelAngle.DEG2RAD
             
             let entryCount = dataSet.entryCount
             
@@ -230,22 +230,19 @@ open class RadarChartRenderer: LineRadarRenderer
                 
                 let valueFont = dataSet.valueFont
                 
-                guard let formatter = dataSet.valueFormatter else { continue }
+                let formatter = dataSet.valueFormatter
                 
                 if dataSet.isDrawValuesEnabled
                 {
-                    ChartUtils.drawText(
-                        context: context,
-                        text: formatter.stringForValue(
-                            e.y,
-                            entry: e,
-                            dataSetIndex: i,
-                            viewPortHandler: viewPortHandler),
-                        point: CGPoint(x: p.x, y: p.y - yoffset - valueFont.lineHeight),
-                        align: .center,
-                        attributes: [NSAttributedString.Key.font: valueFont,
-                            NSAttributedString.Key.foregroundColor: dataSet.valueTextColorAt(j)]
-                    )
+                    context.drawText(formatter.stringForValue(e.y,
+                                                              entry: e,
+                                                              dataSetIndex: i,
+                                                              viewPortHandler: viewPortHandler),
+                                     at: CGPoint(x: p.x, y: p.y - yoffset - valueFont.lineHeight),
+                                     align: .center,
+                                     angleRadians: angleRadians,
+                                     attributes: [.font: valueFont,
+                                                  .foregroundColor: dataSet.valueTextColorAt(j)])
                 }
                 
                 if let icon = e.icon, dataSet.isDrawIconsEnabled
@@ -254,11 +251,9 @@ open class RadarChartRenderer: LineRadarRenderer
                                               atAngle: sliceangle * CGFloat(j) * CGFloat(phaseX) + chart.rotationAngle)
                     pIcon.y += iconsOffset.x
                     
-                    ChartUtils.drawImage(context: context,
-                                         image: icon,
-                                         x: pIcon.x,
-                                         y: pIcon.y,
-                                         size: icon.size)
+                    context.drawImage(icon,
+                                      atCenter: CGPoint(x: pIcon.x, y: pIcon.y),
+                                      size: icon.size)
                 }
             }
         }
@@ -271,7 +266,6 @@ open class RadarChartRenderer: LineRadarRenderer
     
     private var _webLineSegmentsBuffer = [CGPoint](repeating: CGPoint(), count: 2)
     
-    //画背景图
     @objc open func drawWeb(context: CGContext)
     {
         guard
@@ -300,8 +294,7 @@ open class RadarChartRenderer: LineRadarRenderer
 
         for i in stride(from: 0, to: maxEntryCount, by: xIncrements)
         {
-            //画背景直线
-            let p = center.moving(distance: chart.radius / 6 * 5,
+            let p = center.moving(distance: CGFloat(chart.yRange) * factor,
                                   atAngle: sliceangle * CGFloat(i) + rotationangle)
             
             _webLineSegmentsBuffer[0].x = center.x
@@ -318,25 +311,22 @@ open class RadarChartRenderer: LineRadarRenderer
         context.setAlpha(chart.webAlpha)
         
         let labelCount = chart.yAxis.entryCount
+        
         for j in 0 ..< labelCount
         {
             for i in 0 ..< data.entryCount
             {
-//                let r = CGFloat(chart.yAxis.entries[j] - chart.chartYMin) * factor
-//
-//                let p1 = center.moving(distance: r, atAngle: sliceangle * CGFloat(i) + rotationangle)
-//                let p2 = center.moving(distance: r, atAngle: sliceangle * CGFloat(i + 1) + rotationangle)
-//
-//                _webLineSegmentsBuffer[0].x = p1.x
-//                _webLineSegmentsBuffer[0].y = p1.y
-//                _webLineSegmentsBuffer[1].x = p2.x
-//                _webLineSegmentsBuffer[1].y = p2.y
-//
-//                context.strokeLineSegments(between: _webLineSegmentsBuffer)
-                let r = chart.radius / CGFloat(data.entryCount) * CGFloat(i)//CGFloat(chart.yAxis.entries[j] - chart.chartYMin) * factor
-                let circlePath = UIBezierPath(arcCenter: CGPoint(x: center.x, y: center.y), radius: r, startAngle: CGFloat(0), endAngle: CGFloat(Double.pi * 2), clockwise: true)
-                context.addPath(circlePath.cgPath)
-                context.drawPath(using: .stroke)
+                let r = CGFloat(chart.yAxis.entries[j] - chart.chartYMin) * factor
+
+                let p1 = center.moving(distance: r, atAngle: sliceangle * CGFloat(i) + rotationangle)
+                let p2 = center.moving(distance: r, atAngle: sliceangle * CGFloat(i + 1) + rotationangle)
+                
+                _webLineSegmentsBuffer[0].x = p1.x
+                _webLineSegmentsBuffer[0].y = p1.y
+                _webLineSegmentsBuffer[1].x = p2.x
+                _webLineSegmentsBuffer[1].y = p2.y
+                
+                context.strokeLineSegments(between: _webLineSegmentsBuffer)
             }
         }
         
@@ -364,7 +354,7 @@ open class RadarChartRenderer: LineRadarRenderer
         for high in indices
         {
             guard
-                let set = chart.data?.getDataSetByIndex(high.dataSetIndex) as? IRadarChartDataSet,
+                let set = chart.data?[high.dataSetIndex] as? RadarChartDataSetProtocol,
                 set.isHighlightEnabled
                 else { continue }
             
@@ -465,7 +455,7 @@ open class RadarChartRenderer: LineRadarRenderer
 
     private func createAccessibleElement(withDescription description: String,
                                          container: RadarChartView,
-                                         dataSet: IRadarChartDataSet,
+                                         dataSet: RadarChartDataSetProtocol,
                                          modifier: (NSUIAccessibilityElement) -> ()) -> NSUIAccessibilityElement {
 
         let element = NSUIAccessibilityElement(accessibilityContainer: container)
