@@ -8,13 +8,16 @@
 //
 //  https://github.com/danielgindi/Charts
 //
-
 import Foundation
 import CoreGraphics
 
 /// This chart class allows the combination of lines, bars, scatter and candle data all displayed in one chart area.
 open class CombinedChartView: BarLineChartViewBase, CombinedChartDataProvider
 {
+    public var barSettings: BarChartView.BarSettings {
+        BarChartView.BarSettings(rectCorner: .allCorners, cornerRadii: CGSize(width: 0, height: 0))
+    }
+    
     /// the fill-formatter used for determining the position of the fill-line
     internal var _fillFormatter: FillFormatter!
     
@@ -183,7 +186,7 @@ open class CombinedChartView: BarLineChartViewBase, CombinedChartDataProvider
     open var isDrawBarShadowEnabled: Bool { return (renderer as! CombinedChartRenderer).drawBarShadowEnabled }
     
     /// the order in which the provided data objects should be drawn.
-    /// The earlier you place them in the provided array, the further they will be in the background. 
+    /// The earlier you place them in the provided array, the further they will be in the background.
     /// e.g. if you provide [DrawOrder.Bar, DrawOrder.Line], the bars will be drawn behind the lines.
     @objc open var drawOrder: [Int]
     {
@@ -209,7 +212,7 @@ open class CombinedChartView: BarLineChartViewBase, CombinedChartDataProvider
     override func drawMarkers(context: CGContext)
     {
         guard
-            let marker = marker, 
+            let marker = marker,
             isDrawMarkersEnabled && valuesToHighlight()
             else { return }
         
@@ -217,7 +220,7 @@ open class CombinedChartView: BarLineChartViewBase, CombinedChartDataProvider
         {
             let highlight = highlighted[i]
             
-            guard 
+            guard
                 let set = combinedData?.getDataSetByHighlight(highlight),
                 let e = data?.entry(for: highlight)
                 else { continue }

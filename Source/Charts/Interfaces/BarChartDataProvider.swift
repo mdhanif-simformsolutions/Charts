@@ -8,7 +8,6 @@
 //
 //  https://github.com/danielgindi/Charts
 //
-
 import Foundation
 import CoreGraphics
 
@@ -20,4 +19,5 @@ public protocol BarChartDataProvider: BarLineScatterCandleBubbleChartDataProvide
     var isDrawBarShadowEnabled: Bool { get }
     var isDrawValueAboveBarEnabled: Bool { get }
     var isHighlightFullBarEnabled: Bool { get }
+    var barSettings: BarChartView.BarSettings { get }
 }
