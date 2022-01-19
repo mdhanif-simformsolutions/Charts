@@ -21,6 +21,9 @@ class HorizontalBarChartViewController: DemoBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        chartView.barSettings = .init(rectCorner: [.bottomLeft, .bottomRight],
+                                              cornerRadii: CGSize(width: 45, height: 45))
 
         // Do any additional setup after loading the view.
         self.title = "Horizontal Bar Char"

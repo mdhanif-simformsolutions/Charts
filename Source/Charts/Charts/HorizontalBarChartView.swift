@@ -11,10 +11,15 @@
 
 import Foundation
 import CoreGraphics
+import UIKit
 
 /// BarChart with horizontal bar orientation. In this implementation, x- and y-axis are switched.
 open class HorizontalBarChartView: BarChartView
 {
+    
+    private var _barSettings = BarSettings(rectCorner: .allCorners, cornerRadii: .zero)
+
+    
     internal override func initialize()
     {
         super.initialize()
@@ -29,6 +34,16 @@ open class HorizontalBarChartView: BarChartView
 
         self.highlighter = HorizontalBarHighlighter(chart: self)
     }
+    
+    @objc open override var barSettings: BarSettings
+        {
+            get { return _barSettings }
+            set
+            {
+                _barSettings = newValue
+                setNeedsDisplay()
+            }
+        }
     
     internal override func calculateLegendOffsets(offsetLeft: inout CGFloat, offsetTop: inout CGFloat, offsetRight: inout CGFloat, offsetBottom: inout CGFloat)
     {
@@ -267,3 +282,16 @@ open class HorizontalBarChartView: BarChartView
         viewPortHandler.setMinMaxScaleX(minScaleX: CGFloat(minScale), maxScaleX: CGFloat(maxScale))
     }
 }
+
+//extension BarChartView {
+//
+//    public class BarSettings: NSObject {
+//        let rectCorner: UIRectCorner
+//        let cornerRadii: CGSize
+//
+//        public init(rectCorner: UIRectCorner,
+//             cornerRadii: CGSize) {
+//            self.rectCorner = rectCorner
+//            self.cornerRadii = cornerRadii
+//        }
+//    }

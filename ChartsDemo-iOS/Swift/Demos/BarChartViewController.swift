@@ -28,6 +28,9 @@ class BarChartViewController: DemoBaseViewController {
         // Do any additional setup after loading the view.
         self.title = "Bar Chart"
         
+        chartView.barSettings = .init(rectCorner: [.topLeft, .topRight],
+                                              cornerRadii: CGSize(width: 45, height: 45))
+        
         self.options = [.toggleValues,
                         .toggleHighlight,
                         .animateX,
