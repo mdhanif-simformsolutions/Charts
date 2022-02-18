@@ -68,6 +68,7 @@ class CombinedChartViewController: DemoBaseViewController {
         let xAxis = chartView.xAxis
         xAxis.labelPosition = .bothSided
         xAxis.axisMinimum = 0
+        xAxis.axisMaximum = 40
         xAxis.granularity = 1
         xAxis.valueFormatter = self
         
@@ -139,7 +140,7 @@ class CombinedChartViewController: DemoBaseViewController {
         set.circleHoleRadius = 2.5
         set.fillColor = UIColor(red: 240/255, green: 238/255, blue: 70/255, alpha: 1)
         set.mode = .cubicBezier
-        set.drawValuesEnabled = true
+        set.drawValuesEnabled = false
         set.valueFont = .systemFont(ofSize: 10)
         set.valueTextColor = UIColor(red: 240/255, green: 238/255, blue: 70/255, alpha: 1)
         
