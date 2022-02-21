@@ -28,6 +28,9 @@ class CombinedChartViewController: DemoBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        chartView.barSettings = .init(rectCorner: [.topRight, .topLeft],
+                                                              cornerRadii: CGSize(width: 45, height: 45))
+        
         // Do any additional setup after loading the view.
         self.title = "Combined Chart"
         self.options = [.toggleLineValues,
