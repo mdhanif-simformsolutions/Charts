@@ -17,7 +17,7 @@ open class BarChartView: BarLineChartViewBase, BarChartDataProvider
 {
     /// if set to true, all values are drawn above their bars, instead of below their top
     private var _drawValueAboveBarEnabled = true
-    
+
     /// if set to true, a grey area is drawn behind each bar that indicates the maximum value
     private var _drawBarShadowEnabled = false
     
@@ -38,7 +38,7 @@ open class BarChartView: BarLineChartViewBase, BarChartDataProvider
     internal override func calcMinMax()
     {
         guard let data = self.data as? BarChartData
-        else { return }
+            else { return }
         
         if fitBars
         {
@@ -70,7 +70,7 @@ open class BarChartView: BarLineChartViewBase, BarChartDataProvider
         }
         
         guard let h = self.highlighter?.getHighlight(x: pt.x, y: pt.y)
-        else { return nil }
+            else { return nil }
         
         if !isHighlightFullBarEnabled { return h }
         
@@ -83,14 +83,14 @@ open class BarChartView: BarLineChartViewBase, BarChartDataProvider
             stackIndex: -1,
             axis: h.axis)
     }
-    
+        
     /// - Returns: The bounding box of the specified Entry in the specified DataSet. Returns null if the Entry could not be found in the charts data.
     @objc open func getBarBounds(entry e: BarChartDataEntry) -> CGRect
     {
         guard let
-                data = data as? BarChartData,
-              let set = data.getDataSetForEntry(e) as? BarChartDataSetProtocol
-        else { return .null }
+            data = data as? BarChartData,
+            let set = data.getDataSetForEntry(e) as? BarChartDataSetProtocol
+            else { return .null }
         
         let y = e.y
         let x = e.x
@@ -120,7 +120,7 @@ open class BarChartView: BarLineChartViewBase, BarChartDataProvider
     @objc open func groupBars(fromX: Double, groupSpace: Double, barSpace: Double)
     {
         guard let barData = self.barData
-        else
+            else
         {
             Swift.print("You need to set data for the chart before grouping bars.", terminator: "\n")
             return
@@ -140,7 +140,7 @@ open class BarChartView: BarLineChartViewBase, BarChartDataProvider
     {
         highlightValue(Highlight(x: x, dataSetIndex: dataSetIndex, stackIndex: stackIndex))
     }
-    
+
     // MARK: Accessors
     
     /// if set to true, all values are drawn above their bars, instead of below their top
@@ -186,7 +186,8 @@ open class BarChartView: BarLineChartViewBase, BarChartDataProvider
     /// `true` if drawing shadows (maxvalue) for each bar is enabled, `false` ifnot
     open var isDrawBarShadowEnabled: Bool { return drawBarShadowEnabled }
     
-    @objc open var barSettings: BarSettings {
+    @objc open var barSettings: BarSettings
+    {
         get { return _barSettings }
         set
         {
@@ -203,7 +204,7 @@ extension BarChartView {
         let cornerRadii: CGSize
         
         public init(rectCorner: UIRectCorner,
-                    cornerRadii: CGSize) {
+             cornerRadii: CGSize) {
             self.rectCorner = rectCorner
             self.cornerRadii = cornerRadii
         }

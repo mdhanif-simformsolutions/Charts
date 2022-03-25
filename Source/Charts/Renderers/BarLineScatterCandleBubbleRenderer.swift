@@ -105,10 +105,9 @@ open class BarLineScatterCandleBubbleRenderer: NSObject, DataRenderer
             
             let entryFrom = dataSet.entryForXValue(low, closestToY: .nan, rounding: .down)
             let entryTo = dataSet.entryForXValue(high, closestToY: .nan, rounding: .up)
-            let minValue: Int? = entryFrom == nil ? nil : dataSet.entryIndex(entry: entryFrom!)
-            let maxValue: Int? = entryTo == nil ? nil : dataSet.entryIndex(entry: entryTo!)
-            self.min = minValue ?? maxValue ?? 0
-            self.max = maxValue ?? minValue ?? 0
+            
+            self.min = entryFrom == nil ? 0 : dataSet.entryIndex(entry: entryFrom!)
+            self.max = entryTo == nil ? 0 : dataSet.entryIndex(entry: entryTo!)
             range = Int(Double(self.max - self.min) * phaseX)
         }
     }
@@ -135,11 +134,6 @@ extension BarLineScatterCandleBubbleRenderer.XBounds: Sequence {
         private var iterator: IndexingIterator<ClosedRange<Int>>
         
         fileprivate init(min: Int, max: Int) {
-            guard min <= max else {
-                // If min is more then max, it crashes. Happens with large data in zooming and scrolling.  Swap them to make it work.
-                self.iterator = (max...min).makeIterator()
-                return
-            }
             self.iterator = (min...max).makeIterator()
         }
         
