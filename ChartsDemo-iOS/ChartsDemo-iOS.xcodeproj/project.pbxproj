@@ -249,7 +249,7 @@
 		5B613DA31D526AD5000F1E98 /* radar_marker@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "radar_marker@3x.png"; sourceTree = "<group>"; };
 		5B613DB21D526DED000F1E98 /* RadarMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarMarkerView.swift; sourceTree = "<group>"; };
 		5B613DB41D526EA8000F1E98 /* RadarMarkerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RadarMarkerView.xib; sourceTree = "<group>"; };
-		5B613DEF1D5A50B6000F1E98 /* XYMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XYMarkerView.swift; path = ../../../XYMarkerView.swift; sourceTree = "<group>"; };
+		5B613DEF1D5A50B6000F1E98 /* XYMarkerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XYMarkerView.swift; sourceTree = "<group>"; };
 		5B613DF11D5A60DF000F1E98 /* LargeValueFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LargeValueFormatter.swift; sourceTree = "<group>"; };
 		5B8EAF231AB3271B009697AA /* DemoListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DemoListViewController.xib; sourceTree = "<group>"; };
 		5B8EAF251AB32CF5009697AA /* DemoBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoBaseViewController.h; sourceTree = "<group>"; };
@@ -258,7 +258,7 @@
 		5B96243E1B38608C007763E2 /* NegativeStackedBarChartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NegativeStackedBarChartViewController.h; sourceTree = "<group>"; };
 		5B96243F1B38608C007763E2 /* NegativeStackedBarChartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NegativeStackedBarChartViewController.m; sourceTree = "<group>"; };
 		5B9624401B38608C007763E2 /* NegativeStackedBarChartViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NegativeStackedBarChartViewController.xib; sourceTree = "<group>"; };
-		5BD47E5A1ABB0263008FCEC6 /* BalloonMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BalloonMarker.swift; path = ../../../BalloonMarker.swift; sourceTree = "<group>"; };
+		5BD47E5A1ABB0263008FCEC6 /* BalloonMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BalloonMarker.swift; path = "../../Objective-C/Components/BalloonMarker.swift"; sourceTree = "<group>"; };
 		5BD47E5C1ABB0273008FCEC6 /* ChartsDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ChartsDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 		5BD47E5D1ABB3C91008FCEC6 /* LineChart2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineChart2ViewController.h; sourceTree = "<group>"; };
 		5BD47E5E1ABB3C91008FCEC6 /* LineChart2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineChart2ViewController.m; sourceTree = "<group>"; };
