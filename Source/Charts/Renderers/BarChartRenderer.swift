@@ -425,24 +425,11 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                                                 firstIndexInBar: firstIndexInBar,
                                                 lastIndexInBar: lastIndexInBar)
             
-            let path = createBarPath(for: topRectInBar, roundedCorners: dataSet.roundedCorners)
-            
-            
-            //            if (!viewPortHandler.isInBoundsLeft(barRect.origin.x + barRect.size.width))
-            //            {
-            //                continue
-            //            }
+            let path = createBarPath(for: topRectInBar, roundedCorners: dataSet.roundedCorners, cornerRadius: dataSet.cornerRadius)
             
             context.addPath(path.cgPath)
             context.clip()
             
-            //            if (!viewPortHandler.isInBoundsRight(barRect.origin.x))
-            //            {
-            //                break
-            //            }
-            
-            //            if !isSingleColor
-            //            {
             //                // Set the color for the currently drawn value. If the index is out of bounds, reuse colors.
             //                context.setFillColor(dataSet.color(atIndex: j).cgColor)
             for index in firstIndexInBar...lastIndexInBar {
@@ -492,24 +479,6 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
             
             if drawBorder
             {
-                //                context.setStrokeColor(borderColor.cgColor)
-                //                context.setLineWidth(borderWidth)
-                //                context.stroke(barRect)
-                //            }
-                //
-                //            // Create and append the corresponding accessibility element to accessibilityOrderedElements
-                //            if let chart = dataProvider as? BarChartView
-                //            {
-                //                let element = createAccessibleElement(withIndex: j,
-                //                                                      container: chart,
-                //                                                      dataSet: dataSet,
-                //                                                      dataSetIndex: index,
-                //                                                      stackSize: stackSize)
-                //                { (element) in
-                //                    element.accessibilityFrame = barRect
-                //                }
-                //
-                //                accessibilityOrderedElements[j/stackSize].append(element)
                 context.addPath(path.cgPath)
                 context.strokePath()
             }
@@ -873,7 +842,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                 prepareBarHighlight(x: e.x, y1: y1, y2: y2, barWidthHalf: barData.barWidth / 2.0, trans: trans, rect: &highlightRect)
                 setHighlightDrawPos(highlight: high, barRect: highlightRect)
                 
-                let path = createBarPath(for: barRect, roundedCorners: set.roundedCorners)
+                let path = createBarPath(for: barRect, roundedCorners: set.roundedCorners, cornerRadius: set.cornerRadius)
                 
                 context.saveGState()
                 
@@ -883,7 +852,6 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                 
                 context.restoreGState()
                 
-                //                context.fill(barRect)
             }
         }
         
@@ -991,9 +959,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
     }
     
     /// Creates path for bar in rect with rounded corners
-    internal func createBarPath(for rect: CGRect, roundedCorners: UIRectCorner) -> UIBezierPath {
-        let cornerRadius = 5.0//rect.width / 2.0
-        
+    internal func createBarPath(for rect: CGRect, roundedCorners: UIRectCorner, cornerRadius: CGFloat) -> UIBezierPath {
         let path = UIBezierPath(roundedRect: rect, byRoundingCorners: roundedCorners,
                                 cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
         return path
