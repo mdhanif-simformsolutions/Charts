@@ -11,6 +11,7 @@
 
 import Foundation
 import CoreGraphics
+import UIKit
 
 
 open class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
@@ -50,6 +51,15 @@ open class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
     ///
     /// **default**: Linear
     open var mode: Mode = Mode.linear
+    
+    /// For applying shadow
+    open var isApplyShadow = false
+    
+    open var shadowColor: CGColor = UIColor.black.cgColor
+    
+    open var shadowBlur: CGFloat = 4.0
+    
+    open var shadowSize: CGSize = CGSize.init(width: 0, height: 4)
     
     private var _cubicIntensity = CGFloat(0.2)
     

@@ -67,7 +67,9 @@ open class LineChartRenderer: LineRadarRenderer
         {
             context.setLineDash(phase: 0.0, lengths: [])
         }
-        
+        if dataSet.isApplyShadow {
+            context.setShadow(offset: dataSet.shadowSize, blur: dataSet.shadowBlur, color: dataSet.shadowColor)
+        }
         context.setLineCap(dataSet.lineCapType)
         
         // if drawing cubic lines is enabled
@@ -175,7 +177,6 @@ open class LineChartRenderer: LineRadarRenderer
         context.addPath(cubicPath)
         context.setStrokeColor(drawingColor.cgColor)
         context.strokePath()
-        
         context.restoreGState()
     }
     
